@@ -26,7 +26,7 @@ const request     = promisify(require('request'));
 //------------------------------------------------------------------------------
 const stdin       = process.stdin;
 const stdout      = process.stdout;
-const PAUSA       = 5000; // Milisegundos entre cada petición de espera
+const PAUSA       = 1000; // Milisegundos entre cada petición de espera
 const numtablerorow  = [1,2,3,4,5,6,7,8,9,10];
 const lettertablerorow  = [' A ',' B ',' C ',' D ',' E ',' F ',' G ',' H ',' I ',' J '];
 const ships = [
@@ -572,3 +572,4 @@ if (process.argv.length !== 3) {
   invocar = promisify(invocadorServicioWeb(process.argv[2]), 'invocar');
   menu();
 }
+
