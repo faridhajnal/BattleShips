@@ -1,6 +1,7 @@
 var app = angular.module('battleShipApp');
 
-app.controller('menuController', function($scope, $location, $http, $timeout){
+app.controller('menuController', ['$scope', '$location', '$http', '$timeout',
+ function($scope, $location, $http, $timeout){
     
     $scope.creadoBien = false;
 
@@ -41,7 +42,7 @@ app.controller('menuController', function($scope, $location, $http, $timeout){
                 //juegoService.setGameId(response.data.id);
                 $scope.creadoBien = true;
                 $timeout(function(){
-                    $location.path('/colocar');
+                    $location.path('/colocar/'+response.data.id);
                 }, 2000);
 
             }
@@ -55,8 +56,9 @@ app.controller('menuController', function($scope, $location, $http, $timeout){
 
     $scope.ApiUnirJuego = function (id) {
         $http.put('/batalla/unir_juego/', {id_juego : id}).then(function(response){
+            console.log(response.data);
             $timeout(function(){
-                    $location.path('/colocar');
+                    $location.path('/colocar/'+response.data.id);
                 }, 1000 );
         }).catch(function(error){
             console.log('Error de sistema');
@@ -64,5 +66,5 @@ app.controller('menuController', function($scope, $location, $http, $timeout){
     };
 
 
-});
+}]);
 

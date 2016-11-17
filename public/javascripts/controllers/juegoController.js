@@ -2,7 +2,7 @@ var app = angular.module('battleShipApp');
 
 app.controller('juegoController', function($scope, $http, $location){
     
-    const PAUSA = 5000;
+    const PAUSA = 2000;
     esperaTurno();
     $scope.tableroJugador = [   ['','','','','','','','','',''],
                                 ['','','','','','','','','',''],
@@ -18,21 +18,26 @@ app.controller('juegoController', function($scope, $http, $location){
     $scope.numeros = [0,1,2,3,4,5,6,7,8,9];
     $scope.letras = ['A','B','C','D','E','F','G','H','I','J'];
     
-    $scope.realizarTiro = function(le, nu){
-        var x = numeroDeLetra(le);
-        var y = nu;
+    $scope.realizarTiro = function(x, y){
+        
+        console.log('x',x);
+        console.log('y', y);
+        console.log('llamando');
         $http.put('/batalla/tirar/', {x : x, y : y}).then(function(response){
-            console.log('tiro', response);
+            /*console.log('tablero scope', $scope.tableroJugador);
+            console.log('tablero respuesta', response.data.tablero);*/
+            $scope.tableroJugador = response.data.tablero;
+            console.log('actualizado');
+        }).catch(function(error){
+          console.log(error);
         });
     };
 
-    function numeroDeLetra(letra){
-    for(let j = 0; j < $scope.letras.length; j++){
-            if(letra===$scope.letras[j]){
-              return j;
-            }
-          }
-    };
+    $scope.determinarLleno = function (fila, col){
+        if($scope.tableroJugador[fila][col] === 'X') return 1;
+        else if($scope.tableroJugador[fila][col] === 'W') return 2;
+        else return 0;
+    }
 
     function esperaTurno() {
 
@@ -40,7 +45,7 @@ app.controller('juegoController', function($scope, $http, $location){
 
     function ticToc() {
       $scope.mensaje = "Llevas " + segundos + " segundos esperando...";
-      segundos+=5;
+      segundos+=2;
       $http.get('/batalla/estado').then(function(resultado){
           console.log(resultado);
           switch (resultado.data.estado) {
@@ -54,6 +59,7 @@ app.controller('juegoController', function($scope, $http, $location){
 
           case 'espera':
             //console.log('pausa', PAUSA);
+            $scope.mensaje = "Llevas " + segundos + " segundos esperando...";
             setTimeout(ticToc, PAUSA);
             break;
 
@@ -63,9 +69,8 @@ app.controller('juegoController', function($scope, $http, $location){
             break;
 
           case 'perdiste':
-            //finDeJuego('<strong>Perdiste.</strong> ¡Lástima!');
-            //actualizar(resultado.tablero);
-            //resalta(resultado.tablero);
+            
+            $scope.mensaje = "¡PERDISTE!"
             break;
           }
           

@@ -1,7 +1,10 @@
 var app = angular.module('battleShipApp');
 
-app.controller('colocarController', function($scope, $http, $location){
+app.controller('colocarController', function($scope, $http, $location, $routeParams, $timeout){
 
+
+    $scope.juegoid = $routeParams.idjuego;
+    console.log('id juego', $scope.juegoid);
     const PAUSA = 5000;
     var barcosCounter = 0;
     const barcos = [
@@ -45,6 +48,7 @@ app.controller('colocarController', function($scope, $http, $location){
     }
 
     $scope.guardar = function(x, y, or){
+          console.log('x', x); console.log('y', y);
           if(barcosCounter < 5){
             var o = or;
             var barcoAcolocar = barcos[barcosCounter];
@@ -65,7 +69,7 @@ app.controller('colocarController', function($scope, $http, $location){
                     $http.put('/batalla/colocarBarco/', {ind : index, or: o, bl: block_array}).then(function(response){
                         barcosCounter++;
                         sobrino(true, index, response.data.tablero, block_array);
-                        swal("Barco Colocado", "todo chido :)");
+                        //swal("Barco Colocado", "todo chido :)");
                         console.log('tablero jugadors', $scope.tableroJugador);
                         if(barcosCounter === 5){
                             
@@ -73,8 +77,16 @@ app.controller('colocarController', function($scope, $http, $location){
                                 name : 'Ninguno',
                                 size : 'N/D'
                             }
-                            readyToPlay = true;
-                            $location.path('/juego');                      
+                            $http.put('/batalla/pready/', {id_juego: $scope.juegoid}).then(function(response){
+                                console.log(response.data);
+                                swal("Listo", "Redirigiendo...");
+                                $timeout(function(){
+                                    $location.path('/juego/'+$scope.juegoid);
+                                },2000);
+                            }).catch(function(error){
+                                console.log('ERROR', error);      
+                            });
+                                                  
                         }
                         else
                         $scope.barcoAcolocar = barcos[barcosCounter];
@@ -107,7 +119,15 @@ app.controller('colocarController', function($scope, $http, $location){
                                 name : 'Ninguno',
                                 size : 'N/D'
                             }
-                            $location.path('/juego');  
+                            $http.put('/batalla/pready/', {id_juego: $scope.juegoid}).then(function(response){
+                                console.log(response.data);
+                                swal("Listo", "Redirigiendo...");
+                                $timeout(function(){
+                                    $location.path('/juego/' + $scope.juegoid);
+                                },2000);
+                            }).catch(function(error){
+                                console.log('ERROR', error);      
+                            }); 
                         }
                         else
                         $scope.barcoAcolocar = barcos[barcosCounter];

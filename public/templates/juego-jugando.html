@@ -20,14 +20,24 @@
 
 <hr/>
 
-<div class="row" ng-repeat="letra in letras">
+<div class="row" >
 
-    <div class="col-xs-1 validposicion_tablero" style="border-style: solid; height:50px" ng-repeat="numero in numeros"
-    ng-click="realizarTiro(letra,numero)">
+    <div class="col-xs-1 coordniceassblue" ng-repeat="numero in numeros">{{numero}}</div>
 
-        {{letra}}{{numero}}
+</div>
+
+<div class="row" ng-repeat="fila in tableroJugador">
+    
+    <div class="col-xs-1 validposicion_tablero"
+    ng-click="realizarTiro(tableroJugador.indexOf(fila), $index)"
+    ng-class="{'tirado_agua': determinarLleno(tableroJugador.indexOf(fila), $index)===1, 
+               'tirado_tocado' : determinarLleno(tableroJugador.indexOf(fila), $index)===2}"
+    style="border-style: solid; height:50px" ng-repeat="columna in fila track by $index">
+
+       
 
     </div>
+    <div class="col-xs-1 coordniceassred">{{letra}}</div>
     
 </div>
 

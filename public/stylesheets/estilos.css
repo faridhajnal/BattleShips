@@ -63,8 +63,16 @@ footer {
 }
 
 .activo {
-    color: Blue;
+    cursor : auto;
     background-color: blue;
+}
+
+.tirado_agua {
+    background-color: limegreen;
+}
+
+.tirado_tocado {
+    background-color: darkslategrey;
 }
 
 .desactivo {

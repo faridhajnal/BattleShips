@@ -1,6 +1,5 @@
-var app = angular.module('battleShipApp', ['ngRoute']);
-
-app.config(function($routeProvider){
+var app = angular.module('battleShipApp', ['ngRoute'])
+.config(function($routeProvider){
     $routeProvider
     .when('/menu', {
         templateUrl : 'templates/menu.html',
@@ -14,11 +13,11 @@ app.config(function($routeProvider){
         templateUrl : 'templates/unir-juego.html',
         controller : 'menuController'
     })
-    .when('/juego', {
+    .when('/juego/:idjuego', {
         templateUrl : 'templates/juego-jugando.html',
         controller : 'juegoController'
     })
-    .when('/colocar', {
+    .when('/colocar/:idjuego', {
         templateUrl : 'templates/colocar-barcos.html',
         controller : 'colocarController'
     })
