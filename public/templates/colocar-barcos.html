@@ -1,0 +1,43 @@
+<h1> Configurar tu Tablero </h1>
+
+<div style="float:center">
+
+<div class="alert alert-warning">
+  <strong>Barco a Colocar: </strong> {{barcoAcolocar.name}}
+  <strong>Posiciones: </strong> {{barcoAcolocar.size}}
+</div>
+
+<p>Elige orientación, si es Horizontal se contará de la coordenada inicial a la derecha; si es Vertical, hacia abajo</p>
+
+<br/>
+
+<select id="orientationSelect" class="form-control" ng-model="orientacion">
+
+    <option value="h">Horizontal</option>
+    <option value="v">Vertical</option>
+
+</select>
+
+
+<hr/>
+
+<div class="row" >
+
+    <div class="col-xs-1 coordniceassblue" ng-repeat="numero in numeros">{{numero}}</div>
+
+</div>
+
+<div class="row" ng-repeat="fila in TableroJugador">
+    
+    <div class="col-xs-1 validposicion_tablero"
+    ng-click="guardar(TableroJugador.indexOf(fila), $index, orientacion)" ng-disabled="determinarLleno(TableroJugador.indexOf(fila), $index)" ng-class="{'activo': determinarLleno(TableroJugador.indexOf(fila), $index)}"
+    style="border-style: solid; height:50px" ng-repeat="columna in fila track by $index">
+
+       
+
+    </div>
+    <div class="col-xs-1 coordniceassred">{{letra}}</div>
+    
+</div>
+
+<div>

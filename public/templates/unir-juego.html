@@ -1,0 +1,19 @@
+<h1> Unirte a un juego </h1>
+    <div ng-if="listaDeJuegos.length > 0">
+    <h5>Selecciona un juego de la lista</h5>
+    <span>Juegos Disponibles  </span>
+    
+    <select name="repeatSelect" id="repeatSelect" ng-model="juegoSeleccionado"
+            ng-options='juego.id as juego.nombre for juego in listaDeJuegos'></select>
+
+    <button class="btn-small btn-success" ng-click="ApiUnirJuego(juegoSeleccionado)"><i class="fa fa-check" aria-hidden="true"></i></button>
+    </div>
+
+    <div ng-if="listaDeJuegos.length === 0">
+
+        <p>¡Ups! No hay juegos disponibles aún <br/>¿ Deseas <a href="#/crear">crear uno nuevo</a> ? </p>
+
+    </div>
+<hr/>
+
+<a href="/#menu">Volver al menú principal</a>

@@ -48,7 +48,6 @@ esquemaJuego.methods.getTableros = function (userRole) {
   if(userRole === 1){
       tableros.push(JSON.parse(this.tablero_j1_game));
       tableros.push(JSON.parse(this.tablero_j1_own));
-      console.log('terminando');
   }
 
   else if(userRole === 2){

@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Juego de batalla distribuido
  * Implementación de servicios web.
- * Copyright (C) 2013-2016 por Ariel Ortiz
+ * Copyright (C) 2013-2016 por Ariel Ortiz, Mario Torres & Farid Hajnal
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

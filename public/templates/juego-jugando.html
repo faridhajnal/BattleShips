@@ -1,0 +1,34 @@
+<h1> Tablero del juego </h1>
+
+<div style="float:center">
+
+<div class="alert alert-info">
+  <strong>Estatus</strong> {{mensaje}}
+</div>
+
+<!--p>Elige orientación, si es Horizontal se contará de la coordenada inicial a la derecha; si es Vertical, hacia abajo</p>
+
+<br/>
+
+<select id="orientationSelect" class="form-control" ng-model="orientacion">
+
+    <option value="h" selected>Horizontal</option>
+    <option value="v">Vertical</option>
+
+</select!-->
+
+
+<hr/>
+
+<div class="row" ng-repeat="letra in letras">
+
+    <div class="col-xs-1 validposicion_tablero" style="border-style: solid; height:50px" ng-repeat="numero in numeros"
+    ng-click="realizarTiro(letra,numero)">
+
+        {{letra}}{{numero}}
+
+    </div>
+    
+</div>
+
+<div>
