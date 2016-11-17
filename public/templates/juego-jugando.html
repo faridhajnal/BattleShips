@@ -26,7 +26,7 @@
 
 </div>
 
-<div class="row" ng-repeat="fila in tableroJugador">
+<div class="row" ng-repeat="fila in tableroJugador track by $index">
     
     <div class="col-xs-1 validposicion_tablero"
     ng-click="realizarTiro(tableroJugador.indexOf(fila), $index)"
@@ -37,7 +37,7 @@
        
 
     </div>
-    <div class="col-xs-1 coordniceassred">{{letra}}</div>
+    <div class="col-xs-1 coordniceassred">{{letras[$index]}}</div>
     
 </div>
 

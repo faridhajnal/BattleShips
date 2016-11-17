@@ -27,17 +27,17 @@
 
 </div>
 
-<div class="row" ng-repeat="fila in TableroJugador">
+<div class="row" ng-repeat="fila in TableroJugador track by $index">
     
     <div class="col-xs-1 validposicion_tablero"
     ng-click="guardar(TableroJugador.indexOf(fila), $index, orientacion)" ng-disabled="determinarLleno(TableroJugador.indexOf(fila), $index)" ng-class="{'activo': determinarLleno(TableroJugador.indexOf(fila), $index)}"
     style="border-style: solid; height:50px" ng-repeat="columna in fila track by $index">
 
-       
+    
 
     </div>
-    <div class="col-xs-1 coordniceassred">{{letra}}</div>
     
+    <div class="col-xs-1 coordniceassred">{{letras[$index]}}</div>
 </div>
 
 <div>
