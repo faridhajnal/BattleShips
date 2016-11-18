@@ -70,7 +70,7 @@
 
     </div>
 
-    <div class="row" ng-repeat="fila in tirosJugador track by $index">
+    <div class="row" ng-repeat="fila in tirosJugador track by $index" ng-class="{'tablero_disabled':bloquearTablero}">
         
         <div class="col-xs-1 validposicion_tablero"
         ng-disabled="true"

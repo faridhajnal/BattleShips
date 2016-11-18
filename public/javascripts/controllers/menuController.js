@@ -20,7 +20,6 @@ app.controller('menuController', ['$scope', '$location', '$http', '$timeout',
         response.data.forEach(function(element){
             $scope.listaDeJuegos.push(element);
         });
-        console.log('lista Juegos', $scope.listaDeJuegos);
     });
 
     $scope.ApiCrearJuego = function () {
@@ -36,10 +35,6 @@ app.controller('menuController', ['$scope', '$location', '$http', '$timeout',
                     });
             }
             else{
-
-
-                console.log(response.data);
-                //juegoService.setGameId(response.data.id);
                 $scope.creadoBien = true;
                 $timeout(function(){
                     $location.path('/colocar/'+response.data.id);

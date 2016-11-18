@@ -4,7 +4,6 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
 
 
     $scope.juegoid = $routeParams.idjuego;
-    console.log('id juego', $scope.juegoid);
     const PAUSA = 1000;
     var barcosCounter = 0;
     const barcos = [
@@ -31,20 +30,59 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
 
     $scope.barcoAcolocar = barcos[barcosCounter];
 
-    function sobrino(horizontal, index, tableroJugador, blockArray){
-
-            console.log('index', index);
+    function sobrino(orientacion, index, tableroJugador, blockArray){
             for(var i = 0; i<blockArray.length; i++)
             {
-                if(horizontal){
+                if(orientacion==="hor"){
                     $scope.TableroJugador[index][blockArray[i]] = 'Z';
                 } else{
                     $scope.TableroJugador[blockArray[i]][index] = 'Z';
                 }
             }
+    }
+
+    function enviarBarcoApi(orientacion, barco, inicial, indice){
+        var sum = inicial+barco.size;
+        var block_array = [];
+        if(sum > 10){
+            swal("Inválido", "Tu tiro no cabe en el tablero");
+        }
+        else{
+            var index = indice;
+            for(let i = inicial; i < sum; i++){
+                block_array.push(i);
+            }                
+
+            $http.put('/batalla/colocarBarco/', {ind : index, or: orientacion, bl: block_array}).then(function(response){
+                barcosCounter++;
+                sobrino(orientacion, index, response.data.tablero, block_array);
+
+                if(barcosCounter === 5){
+                    
+                    $scope.barcoAcolocar = {
+                        name : 'Ninguno',
+                        size : 'N/D'
+                    }
+                    $http.put('/batalla/pready/', {id_juego: $scope.juegoid}).then(function(response){
+                        
+                        swal("Listo", "Redireccionando...");
+                        $timeout(function(){
+                            $location.path('/juego/'+$scope.juegoid);
+                        },2000);
+                    }).catch(function(error){
+                        console.log('ERROR', error);      
+                    });
+                                            
+                }
+                else
+                $scope.barcoAcolocar = barcos[barcosCounter];
+            }).catch(function(error){
+                console.log('ocupado');
+                throw error;
+            });
             
-        
-        console.log($scope.TableroJugador);
+        }
+                
     }
 
     $scope.guardar = function(event, y, x){
@@ -52,114 +90,30 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
          event.preventDefault();
          switch(event.which){
              case 1 :
-             console.log('left');
-             or = "hor";
-             break;
+                or = "hor";
+                break;
              case 2 : 
-             break;
+                break;
              case 3 : 
-             or = "ver";
-             console.log('right');
-             break;
+                or = "ver";
+                break;
              default:
-             break;
+                break;
          }
-          console.log('x', x); console.log('y', y);
+          
           if(barcosCounter < 5){
             var o = or;
-            var barcoAcolocar = barcos[barcosCounter];
-            
-           
-            
+            var barcoAcolocar = barcos[barcosCounter];            
             if(o === 'hor'){
-                var sumx = x+barcoAcolocar.size;
-                var block_array = [];
-                if(sumx > 10){
-                    console.log('invalido en x');
-                }
-                else{
-                    console.log('tiro valido');
-                    var index = y;
-                    for(let i = x; i < sumx; i++){
-                        block_array.push(i);
-                    }                
-
-                    $http.put('/batalla/colocarBarco/', {ind : index, or: o, bl: block_array}).then(function(response){
-                        barcosCounter++;
-                        sobrino(true, index, response.data.tablero, block_array);
-                        //swal("Barco Colocado", "todo chido :)");
-                        console.log('tablero jugadors', $scope.tableroJugador);
-                        if(barcosCounter === 5){
-                            
-                            $scope.barcoAcolocar = {
-                                name : 'Ninguno',
-                                size : 'N/D'
-                            }
-                            $http.put('/batalla/pready/', {id_juego: $scope.juegoid}).then(function(response){
-                                console.log(response.data);
-                                swal("Listo", "Redirigiendo...");
-                                $timeout(function(){
-                                    $location.path('/juego/'+$scope.juegoid);
-                                },2000);
-                            }).catch(function(error){
-                                console.log('ERROR', error);      
-                            });
-                                                  
-                        }
-                        else
-                        $scope.barcoAcolocar = barcos[barcosCounter];
-                    }).catch(function(error){
-                        console.log('ocupado');
-                        throw error;
-                    });
-                    
-                }
-                
+                enviarBarcoApi(o, barcoAcolocar, x, y);               
             }
 
             else if(o === 'ver'){
-                var sumy = y+barcoAcolocar.size;
-                var block_array = [];
-                if( sumy > 10){
-                console.log('invalido en y');
-                }
-                else{
-                    console.log('tiro valido');
-                    var index = x;
-                    for(let i = y; i < sumy; i++){
-                        block_array.push(i);
-                    }
-                    $http.put('/batalla/colocarBarco/', {ind : index, or: o, bl: block_array}).then(function(response){
-                        barcosCounter++;
-                        sobrino(false, index, response.data.tablero, block_array);
-                        $scope.tableroJugador = response.data.tablero;
-                        if(barcosCounter === 5){
-                            $scope.barcoAcolocar = {
-                                name : 'Ninguno',
-                                size : 'N/D'
-                            }
-                            $http.put('/batalla/pready/', {id_juego: $scope.juegoid}).then(function(response){
-                                console.log(response.data);
-                                swal("Listo", "Redirigiendo...");
-                                $timeout(function(){
-                                    $location.path('/juego/' + $scope.juegoid);
-                                },2000);
-                            }).catch(function(error){
-                                console.log('ERROR', error);      
-                            }); 
-                        }
-                        else
-                        $scope.barcoAcolocar = barcos[barcosCounter];
-                    }).catch(function(error){
-                        console.log('ocupado');
-                        throw error;
-                    });
-                    
-                }
+                enviarBarcoApi(o, barcoAcolocar, y, x);
             }
-        }
+          }
 
-        else{
+          else{
             
             swal({
                     title: "No se pueden colocar más barcos",
@@ -168,115 +122,12 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
                     confirmButtonText: "OK"
                     });
             return;
-        }
-    }
+           }
+    };
 
     $scope.determinarLleno = function (fila, col){
         return $scope.TableroJugador[fila][col] === 'Z';
-    }
-
-    $scope.seleccionarCoordenada = function(le, nu, or){
-        
-        if(barcosCounter < 5){
-            var y = numeroDeLetra(le);
-            var x = nu;
-            var o = or;
-            var barcoAcolocar = barcos[barcosCounter];
-            var sumx = x+barcoAcolocar.size;
-            var sumy = y+barcoAcolocar.size;
-            console.log('x',x); console.log('y',y); console.log('or',o);
-            console.log('barco', barcoAcolocar);
-            var block_array = [];
-            if(o === 'h'){
-                if(sumx > 10){
-                    console.log('invalido en x');
-                }
-                else{
-                    console.log('tiro valido');
-                    var index = y;
-                    for(let i = x; i < sumx; i++){
-                        block_array.push(i);
-                    }
-
-                    var  generaCoordenadas = function(index, blockArray){
-                         fila = $scope.letras.indexOf(index);
-
-                    }                    
-
-                    $http.put('/batalla/colocarBarco/', {ind : index, or: o, bl: block_array}).then(function(response){
-                        barcosCounter++;
-                        swal("Barco Colocado", "todo chido :)");
-                        actualizarTablero(response.data.tablero);
-                        $scope.tableroJugador = response.data.tablero;
-                        console.log('tablero jugadors', $scope.tableroJugador);
-                        if(barcosCounter === 5){
-                            
-                            $scope.barcoAcolocar = {
-                                name : 'Ninguno',
-                                size : 'N/D'
-                            }
-                            readyToPlay = true;
-                            $location.path('/juego');                      
-                        }
-                        else
-                        $scope.barcoAcolocar = barcos[barcosCounter];
-                    }).catch(function(error){
-                        console.log('ocupado');
-                        throw error;
-                    });
-                    
-                }
-                
-            }
-
-            else if(o === 'v'){
-                if( sumy > 10){
-                console.log('invalido en y');
-                }
-                else{
-                    console.log('tiro valido');
-                    var index = x;
-                    for(let i = y; i < sumy; i++){
-                        block_array.push(i);
-                    }
-                    $http.put('/batalla/colocarBarco/', {ind : index, or: o, bl: block_array}).then(function(response){
-                        barcosCounter++;
-                        swal("Barco Colocado", "todo chido :)");
-                        $scope.tableroJugador = response.data.tablero;
-                        if(barcosCounter === 5){
-                            $scope.barcoAcolocar = {
-                                name : 'Ninguno',
-                                size : 'N/D'
-                            }
-                            $location.path('/juego');  
-                        }
-                        else
-                        $scope.barcoAcolocar = barcos[barcosCounter];
-                    }).catch(function(error){
-                        console.log('ocupado');
-                        throw error;
-                    });
-                    
-                }
-            }
-        }
-
-        else{
-            
-            swal({
-                    title: "No se pueden colocar más barcos",
-                    text: "Ya has colocado tus 5 barcos",
-                    type: "info",
-                    confirmButtonText: "OK"
-                    });
-            return;
-        }
-
-        
-
-        
     };
-
     
     function numeroDeLetra(letra){
     for(let j = 0; j < $scope.letras.length; j++){

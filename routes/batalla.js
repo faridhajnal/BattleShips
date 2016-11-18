@@ -125,7 +125,7 @@ router.get('/batalla/estado/', (req, res) => {
       });
     });
  
-   (count===3) ? count=true : count = false;
+   (count===17) ? count=true : count = false;
    return count;
   }
 
