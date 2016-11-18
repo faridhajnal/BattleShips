@@ -29,7 +29,7 @@
 
 <div class="row" ng-repeat="fila in TableroJugador track by $index">
     
-    <div class="col-xs-1 validposicion_tablero" 
+    <div class="col-xs-1 col-md-1 validposicion_tablero" 
     ng-mousedown="(determinarLleno(TableroJugador.indexOf(fila), $index)) || guardar($event,TableroJugador.indexOf(fila), $index, orientacion)" 
     ng-class="{'activo': determinarLleno(TableroJugador.indexOf(fila), $index)}"
     style="border-style: solid; height:50px" ng-repeat="columna in fila track by $index">
