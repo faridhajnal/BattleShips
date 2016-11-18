@@ -5,7 +5,7 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
 
     $scope.juegoid = $routeParams.idjuego;
     console.log('id juego', $scope.juegoid);
-    const PAUSA = 5000;
+    const PAUSA = 1000;
     var barcosCounter = 0;
     const barcos = [
                 {name:"CARRIER",size: 5},
@@ -27,7 +27,7 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
                             ];
     $scope.numeros = [0,1,2,3,4,5,6,7,8,9];
     $scope.letras = ['A','B','C','D','E','F','G','H','I','J'];
-    $scope.orientacion = "h";
+    $scope.orientacion = "hor";
 
     $scope.barcoAcolocar = barcos[barcosCounter];
 
@@ -47,22 +47,40 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
         console.log($scope.TableroJugador);
     }
 
-    $scope.guardar = function(x, y, or){
+    $scope.guardar = function(event, y, x){
+         var or;
+         event.preventDefault();
+         switch(event.which){
+             case 1 :
+             console.log('left');
+             or = "hor";
+             break;
+             case 2 : 
+             break;
+             case 3 : 
+             or = "ver";
+             console.log('right');
+             break;
+             default:
+             break;
+         }
           console.log('x', x); console.log('y', y);
           if(barcosCounter < 5){
             var o = or;
             var barcoAcolocar = barcos[barcosCounter];
-            var sumx = x+barcoAcolocar.size;
-            var sumy = y+barcoAcolocar.size;
-            var block_array = [];
-            if(o === 'h'){
+            
+           
+            
+            if(o === 'hor'){
+                var sumx = x+barcoAcolocar.size;
+                var block_array = [];
                 if(sumx > 10){
                     console.log('invalido en x');
                 }
                 else{
                     console.log('tiro valido');
-                    var index = x;
-                    for(let i = y; i < sumy; i++){
+                    var index = y;
+                    for(let i = x; i < sumx; i++){
                         block_array.push(i);
                     }                
 
@@ -99,20 +117,21 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
                 
             }
 
-            else if(o === 'v'){
+            else if(o === 'ver'){
+                var sumy = y+barcoAcolocar.size;
+                var block_array = [];
                 if( sumy > 10){
                 console.log('invalido en y');
                 }
                 else{
                     console.log('tiro valido');
-                    var index = y;
-                    for(let i = x; i < sumx; i++){
+                    var index = x;
+                    for(let i = y; i < sumy; i++){
                         block_array.push(i);
                     }
                     $http.put('/batalla/colocarBarco/', {ind : index, or: o, bl: block_array}).then(function(response){
                         barcosCounter++;
                         sobrino(false, index, response.data.tablero, block_array);
-                        swal("Barco Colocado", "todo chido :)");
                         $scope.tableroJugador = response.data.tablero;
                         if(barcosCounter === 5){
                             $scope.barcoAcolocar = {

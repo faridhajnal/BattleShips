@@ -125,7 +125,7 @@ router.get('/batalla/estado/', (req, res) => {
       });
     });
  
-   (count===2) ? count=true : count = false;
+   (count===3) ? count=true : count = false;
    return count;
   }
 
@@ -161,6 +161,7 @@ router.get('/batalla/estado/', (req, res) => {
 
       else if(ganado(tablero[1])){
         resultado.estado = 'ganaste';
+        console.log('gano');
         res.json(resultado);
         eliminarJuegoJugadores();
       }
@@ -168,7 +169,6 @@ router.get('/batalla/estado/', (req, res) => {
       else if(ganado(tablerocontr[1])){
         resultado.estado = 'perdiste';
         res.json(resultado);
-        eliminarJuegoJugadores();
       }
 
       else if (juego.turno === jugador.rol && juego.READY===2) {
@@ -229,6 +229,7 @@ router.put('/batalla/tirar/', (req, res) => {
       else{
           tablerojug[x][y] = 'W';
           tablerocon[x][y] = 'W';
+          //console.log('cmbiando Turno', juego.turno);
           juego.turno = cambiarTurno(juego.turno);
       }
       

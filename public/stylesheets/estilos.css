@@ -67,12 +67,22 @@ footer {
     background-color: blue;
 }
 
-.tirado_agua {
+.tirado_tocado {
     background-color: limegreen;
+    cursor : default;
 }
 
-.tirado_tocado {
+.tirado_tocado:hover {
+    background-color: limegreen;
+    cursor : default;
+}
+
+.tirado_barco {
     background-color: darkslategrey;
+}
+
+.tirado_agua {
+    background-color: darkred;
 }
 
 .desactivo {
@@ -125,4 +135,28 @@ footer {
     color: darkred;
     font-size: 20px;
     margin-top:5px;
+}
+
+.cb {    
+    list-style: none;
+    padding: 10px;
+    display:inline-block;
+    background-color : #FFF; 
+    color: #000;
+    border: 1px solid black;
+	border-radius: 5px;
+}
+.cb:hover{
+	background-color: #d9edf7; 
+	color: #000;
+    cursor:pointer;
+}
+.cbactive{
+    background-color : mediumblue; 
+	color: white ;
+}
+
+.tablero_disabled {
+    background-color: darkslategrey;
+    cursor : default;
 }

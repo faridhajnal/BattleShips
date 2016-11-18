@@ -2,9 +2,28 @@ var app = angular.module('battleShipApp');
 
 app.controller('juegoController', function($scope, $http, $location){
     
-    const PAUSA = 2000;
+    const PAUSA = 1000;
+    $scope.tab = 1;
+
+    $scope.changeTab = function(tabNum){
+      console.log('changeTab', tabNum);
+      $scope.tab = tabNum;
+    };
+
+    $scope.bloquearTablero = false;
     esperaTurno();
     $scope.tableroJugador = [   ['','','','','','','','','',''],
+                                ['','','','','','','','','',''],
+                                ['','','','','','','','','',''],
+                                ['','','','','','','','','',''],
+                                ['','','','','','','','','',''],
+                                ['','','','','','','','','',''],
+                                ['','','','','','','','','',''],
+                                ['','','','','','','','','',''],
+                                ['','','','','','','','','',''],
+                                ['','','','','','','','','',''],
+                            ];
+    $scope.tirosJugador = [   ['','','','','','','','','',''],
                                 ['','','','','','','','','',''],
                                 ['','','','','','','','','',''],
                                 ['','','','','','','','','',''],
@@ -27,15 +46,24 @@ app.controller('juegoController', function($scope, $http, $location){
             /*console.log('tablero scope', $scope.tableroJugador);
             console.log('tablero respuesta', response.data.tablero);*/
             $scope.tableroJugador = response.data.tablero;
+            esperaTurno();
             console.log('actualizado');
         }).catch(function(error){
           console.log(error);
         });
     };
 
-    $scope.determinarLleno = function (fila, col){
-        if($scope.tableroJugador[fila][col] === 'X') return 1;
-        else if($scope.tableroJugador[fila][col] === 'W') return 2;
+    $scope.determinarLleno = function (tipo, fila, col){
+        if(tipo === 1){
+          if($scope.tableroJugador[fila][col] === 'X') return 1;
+          else if($scope.tableroJugador[fila][col] === 'W') return 2;
+        }
+        else if(tipo === 2){
+          if($scope.tirosJugador[fila][col] === 'X') return 1;
+          else if($scope.tirosJugador[fila][col] === 'Z') return 2;
+          else if($scope.tirosJugador[fila][col] === 'W') return 3;
+        }
+        
         else return 0;
     }
 
@@ -44,10 +72,15 @@ app.controller('juegoController', function($scope, $http, $location){
     var segundos = 0;
 
     function ticToc() {
-      $scope.mensaje = "Llevas " + segundos + " segundos esperando...";
-      segundos+=2;
+      $scope.mensaje = "Esperando a tu rival (" + segundos + " segundos) ";
+      segundos++;
       $http.get('/batalla/estado').then(function(resultado){
-          console.log(resultado);
+          
+          $scope.tableroJugador = resultado.data.tablero[1];
+          $scope.tirosJugador = resultado.data.tablero[0];
+          
+          console.log('estado', resultado.data.estado);
+
           switch (resultado.data.estado) {
         
           case 'tu_turno':
@@ -58,19 +91,21 @@ app.controller('juegoController', function($scope, $http, $location){
             break;
 
           case 'espera':
-            //console.log('pausa', PAUSA);
-            $scope.mensaje = "Llevas " + segundos + " segundos esperando...";
+            console.log('ESPERA');
+            $scope.mensaje = "Esperando a tu rival (" + segundos + " segundos) ";
             setTimeout(ticToc, PAUSA);
             break;
 
           case 'ganaste':
-            //finDeJuego('<strong>Ganaste.</strong> ¡Felicidades!');
-            //resalta(resultado.tablero);
+            
+            $scope.mensaje = "¡GANASTE!"
+            $scope.bloquearTablero = true;
             break;
 
           case 'perdiste':
             
             $scope.mensaje = "¡PERDISTE!"
+            $scope.bloquearTablero = true;
             break;
           }
           

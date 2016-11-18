@@ -7,16 +7,16 @@
   <strong>Posiciones: </strong> {{barcoAcolocar.size}}
 </div>
 
-<p>Elige orientación, si es Horizontal se contará de la coordenada inicial a la derecha; si es Vertical, hacia abajo</p>
+<p>Elige orientación,Horizontal:usar click derecho; Vercial: usar click izquierdo</p>
 
 <br/>
 
-<select id="orientationSelect" class="form-control" ng-model="orientacion">
+<!--select id="orientationSelect" class="form-control" ng-model="orientacion">
 
-    <option value="h">Horizontal</option>
-    <option value="v">Vertical</option>
+    <option value="hor">Horizontal</option>
+    <option value="ver">Vertical</option>
 
-</select>
+</select-->
 
 
 <hr/>
@@ -29,8 +29,9 @@
 
 <div class="row" ng-repeat="fila in TableroJugador track by $index">
     
-    <div class="col-xs-1 validposicion_tablero"
-    ng-click="guardar(TableroJugador.indexOf(fila), $index, orientacion)" ng-disabled="determinarLleno(TableroJugador.indexOf(fila), $index)" ng-class="{'activo': determinarLleno(TableroJugador.indexOf(fila), $index)}"
+    <div class="col-xs-1 validposicion_tablero" 
+    ng-mousedown="(determinarLleno(TableroJugador.indexOf(fila), $index)) || guardar($event,TableroJugador.indexOf(fila), $index, orientacion)" 
+    ng-class="{'activo': determinarLleno(TableroJugador.indexOf(fila), $index)}"
     style="border-style: solid; height:50px" ng-repeat="columna in fila track by $index">
 
     

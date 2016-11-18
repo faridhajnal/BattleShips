@@ -6,39 +6,84 @@
   <strong>Estatus</strong> {{mensaje}}
 </div>
 
-<!--p>Elige orientación, si es Horizontal se contará de la coordenada inicial a la derecha; si es Vertical, hacia abajo</p>
-
-<br/>
-
-<select id="orientationSelect" class="form-control" ng-model="orientacion">
-
-    <option value="h" selected>Horizontal</option>
-    <option value="v">Vertical</option>
-
-</select!-->
+<div style="align:right">
+            <div class="cb" ng-class="{'cbactive':tab==1}" ng-click="changeTab(1)">TUS TIROS</div>
+            <div class="cb" ng-class="{'cbactive':tab==2}" ng-click="changeTab(2)">TUS BARCOS</div>
+</div>
 
 
 <hr/>
 
-<div class="row" >
 
-    <div class="col-xs-1 coordniceassblue" ng-repeat="numero in numeros">{{numero}}</div>
 
-</div>
 
-<div class="row" ng-repeat="fila in tableroJugador track by $index">
-    
-    <div class="col-xs-1 validposicion_tablero"
-    ng-click="realizarTiro(tableroJugador.indexOf(fila), $index)"
-    ng-class="{'tirado_agua': determinarLleno(tableroJugador.indexOf(fila), $index)===1, 
-               'tirado_tocado' : determinarLleno(tableroJugador.indexOf(fila), $index)===2}"
-    style="border-style: solid; height:50px" ng-repeat="columna in fila track by $index">
 
-       
+<div id = "tustiros" ng-show="tab == 1 ">
+    <div class="row">
+
+    <div class="col-xs-3 tirado_tocado" style="border-style: solid; height:50px"></div>
+    <div class="col-xs-3"><strong>TIRO ACERTADO</strong></div>
+    <div class="col-xs-3 tirado_agua" style="border-style: solid; height:50px"></div>
+    <div class="col-xs-3"><strong>TIRO FALLADO</strong></div>
+    </div>
+    <hr/>
+    <div class="row" >
+
+        <div class="col-xs-1 coordniceassblue" ng-repeat="numero in numeros">{{numero}}</div>
 
     </div>
-    <div class="col-xs-1 coordniceassred">{{letras[$index]}}</div>
-    
+
+    <div class="row" ng-repeat="fila in tableroJugador track by $index" ng-class="{'tablero_disabled':bloquearTablero}">
+        
+        <div class="col-xs-1 validposicion_tablero"
+        ng-click="(determinarLleno(1,tableroJugador.indexOf(fila), $index)) ||realizarTiro(tableroJugador.indexOf(fila), $index)"
+        ng-class="{'tirado_tocado': determinarLleno(1, tableroJugador.indexOf(fila), $index)===1, 
+                'tirado_agua' : determinarLleno(1, tableroJugador.indexOf(fila), $index)===2}"
+        style="border-style: solid; height:50px" ng-repeat="columna in fila track by $index">
+
+        
+
+        </div>
+        <div class="col-xs-1 coordniceassred">{{letras[$index]}}</div>
+        
+
+    </div>
+
 </div>
 
-<div>
+<div id = "tusbarcos" ng-show="tab == 2">
+    <div class="row">
+    
+    <div class="col-xs-2 tirado_barco" style="border-style: solid; height:50px"></div>
+    <div class="col-xs-2"><strong>BARCO</strong></div>
+    <div class="col-xs-2 tirado_tocado" style="border-style: solid; height:50px"></div>
+    <div class="col-xs-2"><strong>TOCADO </strong></div>
+    <div class="col-xs-2 tirado_agua" style="border-style: solid; height:50px"></div>
+    <div class="col-xs-2"><strong>AGUA</strong></div>
+    </div>
+
+    <hr/>
+
+    <div class="row" >
+
+        <div class="col-xs-1 coordniceassblue" ng-repeat="numero in numeros">{{numero}}</div>
+
+    </div>
+
+    <div class="row" ng-repeat="fila in tirosJugador track by $index">
+        
+        <div class="col-xs-1 validposicion_tablero"
+        ng-disabled="true"
+        ng-class="{'tirado_tocado': determinarLleno(2, tirosJugador.indexOf(fila), $index)===1, 
+                'tirado_barco' : determinarLleno(2, tirosJugador.indexOf(fila), $index)===2,
+                'tirado_agua' : determinarLleno(2, tirosJugador.indexOf(fila), $index)===3}"
+        style="border-style: solid; height:50px" ng-repeat="columna in fila track by $index">
+
+        
+
+        </div>
+        <div class="col-xs-1 coordniceassred">{{letras[$index]}}</div>
+        
+
+    </div>
+</div>
