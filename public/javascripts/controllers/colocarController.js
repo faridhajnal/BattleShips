@@ -6,43 +6,49 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
     $scope.juegoid = $routeParams.idjuego;
     const PAUSA = 1000;
     var barcosCounter = 0;
-    const barcos = [
-                {name:"CARRIER",size: 5},
-                {name:"BATTLESHIP",size:4},
-                {name:"CRUISER",size:3},
-                {name:"SUBMARINE",size:3},
-                {name:"DESTROYER",size:2}
-                ];
-    $scope.TableroJugador = [   ['','','','','','','','','',''],
-                                ['','','','','','','','','',''],
-                                ['','','','','','','','','',''],
-                                ['','','','','','','','','',''],
-                                ['','','','','','','','','',''],
-                                ['','','','','','','','','',''],
-                                ['','','','','','','','','',''],
-                                ['','','','','','','','','',''],
-                                ['','','','','','','','','',''],
-                                ['','','','','','','','','',''],
-                            ];
+    var barcos = [
+                {name:"CARRIER",size: 5,id:"C",orien:"",blocks:[]},
+                {name:"BATTLESHIP",size:4,id:"B",orien:"",blocks:[]},
+                {name:"CRUISER",size:3,id:"R",orien:"",blocks:[]},
+                {name:"SUBMARINE",size:3,id:"S",orien:"",blocks:[]},
+                {name:"DESTROYER",size:2,id:"D",orien:"",blocks:[]}
+              ]; 
+    $scope.TableroJugador = [[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+,[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+,[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+,[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+,[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+,[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+,[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+,[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+,[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+,[{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''},{value : '' , id : ''}]
+];
+
+
     $scope.numeros = [0,1,2,3,4,5,6,7,8,9];
     $scope.letras = ['A','B','C','D','E','F','G','H','I','J'];
     $scope.orientacion = "hor";
 
     $scope.barcoAcolocar = barcos[barcosCounter];
 
-    function sobrino(orientacion, index, tableroJugador, blockArray){
+    function sobrino(ship,orientacion, index, tableroJugador, blockArray){
             for(var i = 0; i<blockArray.length; i++)
             {
                 if(orientacion==="hor"){
-                    $scope.TableroJugador[index][blockArray[i]] = 'Z';
+                    $scope.TableroJugador[index][blockArray[i]].value = 'Z';
+                    $scope.TableroJugador[index][blockArray[i]].id = ship.id;
                 } else{
-                    $scope.TableroJugador[blockArray[i]][index] = 'Z';
+                    $scope.TableroJugador[blockArray[i]][index].value = 'Z';
+                    $scope.TableroJugador[blockArray[i]][index].id = ship.id;
                 }
             }
+            console.log('tablero',$scope.TableroJugador);
     }
 
     function enviarBarcoApi(orientacion, barco, inicial, indice){
         var sum = inicial+barco.size;
+        var id = barco.id;
         var block_array = [];
         if(sum > 10){
             swal("Inválido", "Tu tiro no cabe en el tablero");
@@ -51,11 +57,12 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
             var index = indice;
             for(let i = inicial; i < sum; i++){
                 block_array.push(i);
-            }                
+            }
+            barco.blocks=block_array;                
 
-            $http.put('/batalla/colocarBarco/', {ind : index, or: orientacion, bl: block_array}).then(function(response){
+            $http.put('/batalla/colocarBarco/', {ind : index, id:id ,or: orientacion, bl: block_array}).then(function(response){
                 barcosCounter++;
-                sobrino(orientacion, index, response.data.tablero, block_array);
+                sobrino(barco,orientacion, index, response.data.tablero, block_array);
 
                 if(barcosCounter === 5){
                     
@@ -65,7 +72,12 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
                     }
                     $http.put('/batalla/pready/', {id_juego: $scope.juegoid}).then(function(response){
                         
-                        swal("Listo", "Redireccionando...");
+                        swal({
+                          title: "Listo!",
+                          text: "Redireccionando...",
+                          timer: 2000,
+                          showConfirmButton: false
+                        });
                         $timeout(function(){
                             $location.path('/juego/'+$scope.juegoid);
                         },2000);
@@ -126,7 +138,7 @@ app.controller('colocarController', function($scope, $http, $location, $routePar
     };
 
     $scope.determinarLleno = function (fila, col){
-        return $scope.TableroJugador[fila][col] === 'Z';
+        return $scope.TableroJugador[fila][col].value === 'Z';
     };
     
     function numeroDeLetra(letra){

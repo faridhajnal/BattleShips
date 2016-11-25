@@ -118,10 +118,11 @@ router.get('/batalla/estado/', (req, res) => {
   let resultado = { estado: 'error'};
 
   function ganado(tab){
+    
     let count = 0;
     tab.forEach(function(row){
       row.forEach(function(x){
-        if(x==='X') count++;
+        if(x.value==='X') count++;
       });
     });
  
@@ -161,9 +162,12 @@ router.get('/batalla/estado/', (req, res) => {
 
       else if(ganado(tablero[1])){
         resultado.estado = 'ganaste';
-        console.log('gano');
-        res.json(resultado);
-        eliminarJuegoJugadores();
+        setTimeout(function(){
+          res.json(resultado);
+          eliminarJuegoJugadores();
+        }, 1000);
+        
+        
       }
 
       else if(ganado(tablerocontr[1])){
@@ -222,13 +226,14 @@ router.put('/batalla/tirar/', (req, res) => {
 
     //--------------------------------------------------------------------------
     function guardarCambios(tablerojug, tablerocon, x, y, rol) {
-      if(tablerocon[x][y] === 'Z'){
-          tablerojug[x][y] = 'X';
-          tablerocon[x][y] = 'X';
+      if(tablerocon[x][y].value === 'Z'){
+          tablerojug[x][y].value = 'X';
+          tablerojug[x][y].id = tablerocon[x][y].id;
+          tablerocon[x][y].value = 'X';
       }
       else{
-          tablerojug[x][y] = 'W';
-          tablerocon[x][y] = 'W';
+          tablerojug[x][y].value = 'W';
+          tablerocon[x][y].value = 'W';
           //console.log('cmbiando Turno', juego.turno);
           juego.turno = cambiarTurno(juego.turno);
       }
@@ -259,7 +264,7 @@ router.put('/batalla/tirar/', (req, res) => {
 
         let tableroJugador = juego.getTableros(jugador.rol);
         let tableroContrincante = juego.getTableros(contrincante(jugador.rol));
-        console.log('Enviando tiros...');
+        //console.log('Enviando tiros...');
         guardarCambios(tableroJugador[1], tableroContrincante[0], x, y, jugador.rol);
 
         
@@ -279,17 +284,18 @@ router.put('/batalla/colocarBarco/', (req, res) => {
   obtenerJuegoJugador(req, (err, juego, jugador) => {
 
     //--------------------------------------------------------------------------
-    function guardarCambios(tablero, index, blocks, orientation, rol) {
+    function guardarCambios(tablero, index, blocks,id,orientation, rol) {
       
       if(orientation === "hor"){
         
         blocks.forEach(function(element){
-          if(tablero[parseInt(index)][parseInt(element)] === 'Z'){
+          if(tablero[parseInt(index)][parseInt(element)].value === 'Z'){
             flag = false;
             //resultado.colocado = false;
             //res.status(403).json(resultado);
           }
-          tablero[parseInt(index)][parseInt(element)] = 'Z';
+          tablero[parseInt(index)][parseInt(element)].value = 'Z';
+          tablero[parseInt(index)][parseInt(element)].id=id;
         });
       }
 
@@ -297,13 +303,13 @@ router.put('/batalla/colocarBarco/', (req, res) => {
         
         blocks.forEach(function(element){
 
-          if( tablero[parseInt(element)][parseInt(index)] === 'Z'){
+          if( tablero[parseInt(element)][parseInt(index)].value === 'Z'){
             flag = false;
             //resultado.colocado = false;
             //res.status(403).json(resultado);
           }
-          tablero[parseInt(element)][parseInt(index)] = 'Z';
-          
+          tablero[parseInt(element)][parseInt(index)].value = 'Z';
+          tablero[parseInt(element)][parseInt(index)].id=id;
         });
       }
 
@@ -335,10 +341,12 @@ router.put('/batalla/colocarBarco/', (req, res) => {
     } else {
       let index = parseInt(req.body.ind);
       let blocks = req.body.bl;
+      let id=req.body.id;
       let orientation = req.body.or;
       let tablero = juego.getTableros(jugador.rol);
+     
       
-      guardarCambios(tablero[0], index, blocks, orientation, jugador.rol);
+      guardarCambios(tablero[0], index, blocks,id,orientation, jugador.rol);
     }
   });
 });

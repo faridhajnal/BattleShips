@@ -43,7 +43,7 @@ var esquemaJuego = mongoose.Schema({
 //-------------------------------------------------------------------------------
 esquemaJuego.methods.getTableros = function (userRole) {
 
-  console.log('llamando usando rol', userRole);
+  
   let tableros = [];
   if(userRole === 1){
       tableros.push(JSON.parse(this.tablero_j1_game));

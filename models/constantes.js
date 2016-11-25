@@ -20,7 +20,7 @@
 
 exports.TIROS = ['X', '.'];
 /* Tablero en blanco
-exports.TABLERO_EN_BLANCO = [[' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' '],
+exports.TABLERO_EN_BLANCO : [[' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' '],
 								[' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' '],
 								[' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' '],
 								[' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' '],
@@ -33,22 +33,24 @@ exports.TABLERO_EN_BLANCO = [[' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' '],
 							]
 */
 
-/* TABLERO CON NÚMEROS */exports.TABLERO_EN_BLANCO = [['0','1','2','3','4','5','6','7','8','9'],
-                             ['0','1','2','3','4','5','6','7','8','9'],
-                             ['0','1','2','3','4','5','6','7','8','9'],
-                             ['0','1','2','3','4','5','6','7','8','9'],
-                             ['0','1','2','3','4','5','6','7','8','9'],
-                             ['0','1','2','3','4','5','6','7','8','9'],
-                             ['0','1','2','3','4','5','6','7','8','9'],
-                             ['0','1','2','3','4','5','6','7','8','9'],
-                             ['0','1','2','3','4','5','6','7','8','9'],
-                             ['0','1','2','3','4','5','6','7','8','9']
-                            ];
+/* TABLERO CON NÚMEROS */exports.TABLERO_EN_BLANCO = [
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}],
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}],
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}],
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}],
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}],
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}],
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}],
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}],
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}],
+[{value:'0',id:''},{value:'1',id:''},{value:'2',id:''},{value:'3',id:''},{value:'4',id:''},{value:'5',id:''},{value:'6',id:''},{value:'7',id:''},{value:'8',id:''},{value:'9',id:''}]
+
+]; 
 
 
 /* tablero alternativo
 
-exports.TABLERO_EN_BLANCO = [['0','0','0','0','0','0','0','0','0','0'],
+exports.TABLERO_EN_BLANCO : [['0','0','0','0','0','0','0','0','0','0'],
                              ['1','1','1','1','1','1','1','1','1','1'],
                              ['2','2','2','2','2','2','2','2','2','2'],
                              ['3','3','3','3','3','3','3','3','3','3'],

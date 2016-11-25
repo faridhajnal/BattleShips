@@ -6,8 +6,15 @@
     <select name="repeatSelect" id="repeatSelect" ng-model="juegoSeleccionado"
             ng-options='juego.id as juego.nombre for juego in listaDeJuegos'></select>
 
-    <button class="btn-small btn-success" ng-click="ApiUnirJuego(juegoSeleccionado)"><i class="fa fa-check" aria-hidden="true"></i></button>
+    <button title="Seleccionar" class="btn-small btn-success" ng-click="ApiUnirJuego(juegoSeleccionado)"><i class="fa fa-check" aria-hidden="true"></i></button>
+
+
+    <button title="Refrescar" class="btn-small btn-info" ng-click="RefrescarListaJuegos()"><i class="fa fa-refresh" aria-hidden="true" ng-disabled="true"></i></button>
+    <div class="alert alert-info" ng-show="actualizando">
+    <strong>Un momento</strong> Actualizando lista de Juegos disponibles
     </div>
+    </div>
+
 
     <div ng-if="listaDeJuegos.length === 0">
 

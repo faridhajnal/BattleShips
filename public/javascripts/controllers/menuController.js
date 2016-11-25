@@ -5,6 +5,8 @@ app.controller('menuController', ['$scope', '$location', '$http', '$timeout',
     
     $scope.creadoBien = false;
 
+    
+
     $scope.crearJuego = function () {
         $location.path('/crear');
     };
@@ -15,12 +17,23 @@ app.controller('menuController', ['$scope', '$location', '$http', '$timeout',
 
     $scope.listaDeJuegos = [];
 
-    $http.get('/batalla/juegos_existentes/').then(function(response){
-        
-        response.data.forEach(function(element){
-            $scope.listaDeJuegos.push(element);
+    getJuegosExistentes();
+
+    function getJuegosExistentes() {
+        $scope.actualizando = false;
+        $http.get('/batalla/juegos_existentes/').then(function(response){
+            $scope.listaDeJuegos = response.data;
         });
-    });
+    };
+
+    $scope.RefrescarListaJuegos = function () {
+        $scope.actualizando = true;
+        $timeout(function(){
+            getJuegosExistentes();
+        },1500);
+    }
+
+    
 
     $scope.ApiCrearJuego = function () {
         console.log('intentando crear con nombre:', $scope.nombreJuego);
@@ -50,6 +63,14 @@ app.controller('menuController', ['$scope', '$location', '$http', '$timeout',
     };
 
     $scope.ApiUnirJuego = function (id) {
+        if(id===undefined || id===null){
+            swal({
+              title: "No se puede proceder",
+              text: "Favor de seleccionar un juego",
+              timer: 2500
+            });
+            return;
+        }
         $http.put('/batalla/unir_juego/', {id_juego : id}).then(function(response){
             console.log(response.data);
             $timeout(function(){
