@@ -81,12 +81,27 @@ app.controller('juegoController', function($scope, $http, $location, $timeout){
     }
 
     function checkSunk(id){
-        for(var x=0; x < barcos.length - 1;x++){
-           if (barcos[x].id===id )  {
-              console.log('hits', barcos[x].hits);
-             (barcos[x].hits<barcos[x].size) ? barcos[x].hits+=1 : pushToArray(barcos[x].name);
-          }
-        }
+      switch(id){
+          case "C" :
+                ( barcos[0].hits<barcos[0].size) ? barcos[0].hits+=1 : pushToArray(barcos[0].name);
+                break;
+          case "B" :
+                ( barcos[1].hits<barcos[1].size) ? barcos[1].hits+=1 : pushToArray(barcos[1].name);
+                break;
+          case "R":
+                ( barcos[2].hits<barcos[2].size) ? barcos[2].hits+=1 : pushToArray(barcos[2].name);
+                break;
+          case "S" :
+                  ( barcos[3].hits<barcos[3].size) ? barcos[3].hits+=1 : pushToArray(barcos[3].name);
+                  break;
+          case "D" : 
+                  ( barcos[4].hits<barcos[4].size) ? barcos[4].hits+=1 : pushToArray(barcos[4].name);
+                  
+
+
+      }
+   
+     
     };
 
     function pushToArray(name){
@@ -109,8 +124,8 @@ app.controller('juegoController', function($scope, $http, $location, $timeout){
           $scope.tirosJugador = resultado.data.tablero[0];
           $timeout(function(){
               $scope.tableroJugador.forEach(function(pos){
-                pos.forEach(function(pen){
-                  if(pen.value === 'X') checkSunk(pen.id);
+                pos.forEach(function(emt){
+                  if(emt.value === 'X') checkSunk(emt.id);
                  
                 });
               });
