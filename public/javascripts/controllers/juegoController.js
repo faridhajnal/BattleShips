@@ -2,8 +2,8 @@ var app = angular.module('battleShipApp');
 
 app.controller('juegoController', function($scope, $http, $location, $timeout){
     var barcos = [
-                    {name:"CARRIER",size: 5,id:"C", hits:0},
-                    {name:"BATTLESHIP",size:4,id:"B", hits:0},
+                    {name:"CARRIER",size: 9,id:"C", hits:0},
+                    {name:"BATTLESHIP",size:6,id:"B", hits:0},
                     {name:"CRUISER",size:3,id:"R", hits:0},
                     {name:"SUBMARINE",size:3,id:"S", hits:0},
                     {name:"DESTROYER",size:2,id:"D", hits:0}
@@ -12,7 +12,6 @@ app.controller('juegoController', function($scope, $http, $location, $timeout){
     $scope.tab = 1;
 
     $scope.changeTab = function(tabNum){
-      console.log('changeTab', tabNum);
       $scope.tab = tabNum;
     };
 
@@ -45,18 +44,29 @@ app.controller('juegoController', function($scope, $http, $location, $timeout){
     $scope.numeros = [0,1,2,3,4,5,6,7,8,9];
     $scope.letras = ['A','B','C','D','E','F','G','H','I','J'];
     $scope.sunkShips = [];
-    $scope.realizarTiro = function(x, y){
+    $scope.realizarTiro = function(event, x, y){
         
-        
-        $http.put('/batalla/tirar/', {x : x, y : y}).then(function(response){
+        switch(event.which){
+             case 1 :
+                tirar();
+                break;
+             default:
+                break;
+         }
+
+        function tirar(){
+
+            $http.put('/batalla/tirar/', {x : x, y : y}).then(function(response){
             /*console.log('tablero scope', $scope.tableroJugador);
             console.log('tablero respuesta', response.data.tablero);*/
             $scope.tableroJugador = response.data.tablero;
             esperaTurno();
             
-        }).catch(function(error){
-          console.log(error);
-        });
+            }).catch(function(error){
+              console.log(error);
+            });
+          
+        };
     };
 
     $scope.determinarLleno = function (tipo, fila, col){
@@ -122,20 +132,18 @@ app.controller('juegoController', function($scope, $http, $location, $timeout){
           
           $scope.tableroJugador = resultado.data.tablero[1];
           $scope.tirosJugador = resultado.data.tablero[0];
-          $timeout(function(){
+        
               $scope.tableroJugador.forEach(function(pos){
                 pos.forEach(function(emt){
                   if(emt.value === 'X') checkSunk(emt.id);
                  
                 });
               });
-          },100);
           
           
           switch (resultado.data.estado) {
         
           case 'tu_turno':
-            console.log('tu turno');
             $scope.mensaje = "es tu turno";
             segundos = 0;
             //turnoTirar(resultado.tablero);

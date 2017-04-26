@@ -36,7 +36,7 @@
     <div class="row" ng-repeat="fila in tableroJugador track by $index" ng-class="{'tablero_disabled':bloquearTablero}">
         
         <div class="col-xs-1 validposicion_tablero"
-        ng-click="(determinarLleno(1,tableroJugador.indexOf(fila), $index)) ||realizarTiro(tableroJugador.indexOf(fila), $index)"
+        ng-mousedown="(determinarLleno(1,tableroJugador.indexOf(fila), $index)) || realizarTiro($event,tableroJugador.indexOf(fila), $index)"
         ng-class="{'tirado_tocado': determinarLleno(1, tableroJugador.indexOf(fila), $index)===1, 
                 'tirado_agua' : determinarLleno(1, tableroJugador.indexOf(fila), $index)===2}"
         style="border-style: solid; height:50px" ng-repeat="columna in fila track by $index">
